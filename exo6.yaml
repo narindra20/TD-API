@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: UserProfile API
+  version: 1.0.0
+
+paths:
+  /profiles:
+    post:
+      summary: Créer une liste de profils utilisateurs
+      tags: [Profiles]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateUserProfile'
+            examples:
+              createProfiles:
+                value:
+                  - personal_info:
+                      first_name: "Narindra"
+                      last_name: "Randriamampionona"
+                      birthdate: "1995-04-12"
+                      email: "narindra@example.com"
+                    address:
+                      address_street: "123 Rue de l'Indépendance"
+                      address_city: "Antananarivo"
+                      address_country: "Madagascar"
+                      address_postal_code: "101"
+                    preferences:
+                      needs_newsletter: true
+                      language: "fr"
+      responses:
+        '200':
+          description: Profils créés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+
+  /profiles/{id}:
+    get:
+      summary: Retourne un profil utilisateur par son ID
+      tags: [Profiles]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Profil utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /profiles/{id}/personalInfo:
+    put:
+      summary: Met à jour les infos personnelles
+      tags: [Profiles]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalInfo'
+      responses:
+        '200':
+          description: Profil mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /profiles/{id}/address:
+    put:
+      summary: Met à jour l'adresse
+      tags: [Profiles]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '200':
+          description: Profil mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /profiles/{id}/preferences:
+    put:
+      summary: Met à jour les préférences
+      tags: [Profiles]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Preferences'
+      responses:
+        '200':
+          description: Profil mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "user_abc123"
+
+  schemas:
+    PersonalInfo:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Narindra"
+        last_name:
+          type: string
+          example: "Randriamampionona"
+        birthdate:
+          type: string
+          format: date
+          example: "1995-04-12"
+        email:
+          type: string
+          format: email
+          example: "narindra@example.com"
+
+    Address:
+      type: object
+      properties:
+        address_street:
+          type: string
+          example: "123 Rue de l'Indépendance"
+        address_city:
+          type: string
+          example: "Antananarivo"
+        address_country:
+          type: string
+          example: "Madagascar"
+        address_postal_code:
+          type: string
+          example: "101"
+
+    Preferences:
+      type: object
+      properties:
+        needs_newsletter:
+          type: boolean
+          example: true
+        language:
+          type: string
+          enum: ["mg", "fr", "eng"]
+          example: "fr"
+
+    CreateUserProfile:
+      type: object
+      properties:
+        personal_info:
+          $ref: '#/components/schemas/PersonalInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+        preferences:
+          $ref: '#/components/schemas/Preferences'
+
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/CreateUserProfile'
+        - type: object
+          properties:
+            identifier:
+              type: string
+              example: "user_abc123"

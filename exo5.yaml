@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: Orders API
+  version: 1.0.0
+
+paths:
+  /orders:
+    get:
+      summary: Liste paginée des commandes
+      tags: [Orders]
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      responses:
+        '200':
+          description: Liste des commandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              examples:
+                multipleOrders:
+                  value:
+                    - identifier: 101
+                      customer_name: "Narindra"
+                      creation_datetime: "2025-08-26T10:00:00Z"
+                      total_amount: 12.99
+                    - identifier: 102
+                      customer_name: "Alice"
+                      creation_datetime: "2025-08-26T11:30:00Z"
+                      total_amount: 7.50
+
+    post:
+      summary: Créer une commande (authentification requise)
+      tags: [Orders]
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            examples:
+              createOrder:
+                value:
+                  identifier: 103
+                  customer_name: "Bob"
+                  creation_datetime: "2025-08-26T12:00:00Z"
+                  total_amount: 9.99
+      responses:
+        '200':
+          description: Commande créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+components:
+  parameters:
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 1
+    size:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 10
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    Order:
+      type: object
+      properties:
+        identifier:
+          type: integer
+          example: 101
+        customer_name:
+          type: string
+          example: "Narindra"
+        creation_datetime:
+          type: string
+          format: date-time
+          example: "2025-08-26T10:00:00Z"
+        total_amount:
+          type: number
+          format: float
+          example: 12.99

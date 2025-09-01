@@ -105,7 +105,7 @@ def get_products(
         results = results[:limit]
     return results
 
-# ---------------- EXO5 – Commandes ----------------
+#EXO5 – Commandes
 class Order(BaseModel):
     identifier: int
     customer_name: str

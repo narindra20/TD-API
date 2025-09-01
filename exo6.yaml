@@ -21,7 +21,7 @@ paths:
                 value:
                   - personal_info:
                       first_name: "Narindra"
-                      last_name: "Randriamampionona"
+                      last_name: "Rakotomalala"
                       birthdate: "1995-04-12"
                       email: "narindra@example.com"
                     address:

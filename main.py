@@ -10,12 +10,12 @@ app = FastAPI()
 
 security = HTTPBasic()
 
-# ---------------- EXO1 – Ping ----------------
+#EXO1 – Ping 
 @app.get("/ping", response_class=PlainTextResponse)
 def ping():
     return "pong"
 
-# ---------------- EXO2 – Utilisateurs ----------------
+#EXO2 – Utilisateurs 
 class User(BaseModel):
     id: int
     name: str
@@ -37,7 +37,7 @@ def get_users(
     end = start + size
     return all_users[start:end]
 
-# ---------------- EXO3 – Tâches ----------------
+#EXO3 – Tâches 
 class Task(BaseModel):
     id: int
     title: str
@@ -81,7 +81,7 @@ def delete_tasks_by_ids(ids: List[int]):
             deleted.append(task)
     return deleted
 
-# ---------------- EXO4 – Produits ----------------
+#EXO4 – Produits
 class Product(BaseModel):
     name: str
     expiration_datetime: datetime
@@ -140,7 +140,7 @@ def create_order(
     orders_db.append(order)
     return order
 
-# ---------------- EXO6 – Profils utilisateurs ----------------
+#EXO6 – Profils utilisateurs 
 class PersonalInfo(BaseModel):
     first_name: str
     last_name: str
